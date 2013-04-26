@@ -1,22 +1,24 @@
 #!/bin/sh
+# Stop priority is higher than atq.
+# chkconfig: 345 99 1
 # Second unit
 interval=600
 # filter user
 FUser="apache"
+# MySQL Database
+MYSQL_DB_NAME=""
+# MySQL user name
+MYSQL_USER=""
+# MySQL password
+MYSQL_PASS=""
 # wakealarm
 wakealarm="/sys/class/rtc/rtc0/wakealarm"
 # wake alarm status
 RTime="/proc/driver/rtc"
 # not set grep color
 GREP_OPTIONS=""
-# MySQL User
-MySQL_USER=""
-# MySQL User Password
-MySQL_PASS=""
-# MySQL DB Name
-MySQL_DB=""
 # Most recent job time
-if ! [[ ${2:-0} =~ ^[0-9]+$ ]]; then echo $"Usage number: $2 is not digit"; exit 4; fi
+if ! [[ ${2:-0} =~ ^[0-9]+$ ]]; then echo $"Usage number: $2 is not digit" >&2; exit 4; fi
 MRJTime="`date -d \"$(atq | sort -k2 -k3 | awk '$4 ~ /a/ && $5 ~ /'${FUser}'/ {print $2,$3}' | \
 		head -${2:-1} | tail -1)\" +%s`"
 
@@ -25,15 +27,23 @@ show_atq() {
 }
 
 get_end_date() {
-mysql -u ${MySQL_USER}  -p${MySQL_PASS} ${MySQL_DB} << EOFMYSQL
+mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB_NAME} << EOFMYSQL
 SELECT endtime,title FROM Recorder_reserveTbl where complete=0 order by endtime;
 EOFMYSQL
+	return_code=$?
+	if [ $return_code -ne 0 ]; then
+		exit $return_code
+	fi
 }
 
 show_reservations() {
-mysql -u ${MySQL_USER}  -p${MySQL_PASS} ${MySQL_DB} << EOFMYSQL
+mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB_NAME} << EOFMYSQL
 SELECT starttime,endtime,title FROM Recorder_reserveTbl where complete=0 order by endtime;
 EOFMYSQL
+	return_code=$?
+	if [ $return_code -ne 0 ]; then
+		exit $return_code
+	fi
 }
 
 unsetwake() {
@@ -55,7 +65,7 @@ restart() {
 }
 
 error() {
-	echo $"or Usage: $0 {set|unset|status|restart|(date format:date --help)}" \
+	echo $"or Usage: $0 {set|unset|status|restart|end|res|(date format:date --help)}" >&2 \
 		|| exit 2
 }
 case "$1" in
