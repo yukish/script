@@ -16,7 +16,7 @@ MySQL_PASS=""
 # MySQL DB Name
 MySQL_DB=""
 # Most recent job time
-if ! [[ ${2:-0} =~ ^[0-9]+$ ]]; then echo $"Usage number: $2 is not digit"; exit 4; fi
+if ! [[ ${2:-0} =~ ^[0-9]+$ ]]; then echo $"Usage number: $2 is not digit" >&2; exit 4; fi
 MRJTime="`date -d \"$(atq | sort -k2 -k3 | awk '$4 ~ /a/ && $5 ~ /'${FUser}'/ {print $2,$3}' | \
 		head -${2:-1} | tail -1)\" +%s`"
 
