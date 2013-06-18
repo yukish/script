@@ -3,8 +3,11 @@
 
 today=`date +%F`
 backup_dir=""
-mkdir $backup_dir/system_$today
 backup_location="$backup_dir/system_$today"
+
+if [ ! -d "$backup_location" ]; then
+	mkdir $backup_location
+fi
 
 START=`date +%s`
 
