@@ -13,9 +13,7 @@ fi
 
 START=`date +%s`
 
-#rsync -aAXv --link-dest="$backup_dir/`/bin/ls -1t $backup_dir | grep system | head -2 | tail -1`" /* $backup_location \
-#        --exclude={/dev/*,/proc/*,/sys/*,/tmp/*,/run/*,/mnt/*,/media/*,/lost+found,/home/*/.gvfs}
-#rsync -n -aAXv --link-dest="$backup_dir/`/bin/ls -1t $backup_dir | grep system | head -2 | tail -1`" /* $backup_location \
+#rsync -aAXv --link-dest="${link_destination[1]}" /* $backup_location \
 #        --exclude={/dev/*,/proc/*,/sys/*,/tmp/*,/run/*,/mnt/*,/media/*,/lost+found,/home/*/.gvfs}
 rsync -n -aAXv --link-dest="${link_destination[1]}" /* $backup_location \
         --exclude={/dev/*,/proc/*,/sys/*,/tmp/*,/run/*,/mnt/*,/media/*,/lost+found,/home/*/.gvfs}
