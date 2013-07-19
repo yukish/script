@@ -2,7 +2,7 @@
 # System backup script like the Time Machine.
 
 today=`date +%F`
-backup_dir="/mnt/local_HDD/E430_backup"
+backup_dir=""
 backup_location="$backup_dir/system_$today"
 # The second from last update directory: ${link_destination[1]}
 link_destination=(`/bin/ls -1t $backup_dir | grep 'system_[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}'`)
