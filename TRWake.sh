@@ -1,6 +1,10 @@
 #!/bin/sh
+#
+# @(#) TRwake.sh ver.0.2.0 2012.07
+#
 # Stop priority is higher than atq.
 # chkconfig: 345 99 1
+
 # Second unit
 interval=600
 # filter user
