@@ -1,5 +1,10 @@
 #!/bin/bash
-# System backup script like the Time Machine.
+#
+# @(#) TM_like_backup.sh
+#
+# Description:
+#   System backup script like the Time Machine.
+#
 
 today=`date +%F`
 backup_dir=""
